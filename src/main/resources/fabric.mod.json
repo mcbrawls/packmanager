@@ -1,0 +1,35 @@
+{
+    "schemaVersion": 1,
+    "id": "packmanager",
+    "version": "${version}",
+    "name": "Pack Manager",
+    "description": "This is an example description! Tell everyone what your mod is about!",
+    "authors": [
+        "Me!"
+    ],
+    "contact": {
+        "homepage": "https://fabricmc.net/",
+        "sources": "https://github.com/FabricMC/fabric-example-mod"
+    },
+    "license": "CC0-1.0",
+    "icon": "assets/packmanager/icon.png",
+    "environment": "*",
+    "entrypoints": {
+        "main": [
+            {
+                "value": "net.mcbrawls.packmanager.PackManager",
+                "adapter": "kotlin"
+            }
+        ]
+    },
+    "mixins": [
+        "packmanager.mixins.json"
+    ],
+    "depends": {
+        "fabricloader": ">=0.14.24",
+        "minecraft": "~1.20.2",
+        "java": ">=17",
+        "fabric-api": "*",
+        "fabric-language-kotlin": ">=1.9.20"
+    }
+}
