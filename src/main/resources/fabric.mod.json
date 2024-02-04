@@ -3,19 +3,20 @@
     "id": "packmanager",
     "version": "${version}",
     "name": "Pack Manager",
-    "description": "This is an example description! Tell everyone what your mod is about!",
+    "description": "A library for managing resource packs within contexts.",
     "authors": [
-        "Me!"
+        "Andante"
     ],
     "contact": {
-        "homepage": "https://fabricmc.net/",
-        "sources": "https://github.com/FabricMC/fabric-example-mod"
+        "homepage": "https://github.com/mcbrawls/packmanager",
+        "sources": "https://github.com/mcbrawls/packmanager",
+        "issues": "https://github.com/mcbrawls/packmanager/issues"
     },
-    "license": "CC0-1.0",
+    "license": "MIT",
     "icon": "assets/packmanager/icon.png",
     "environment": "*",
     "entrypoints": {
-        "main": [
+        "server": [
             {
                 "value": "net.mcbrawls.packmanager.PackManager",
                 "adapter": "kotlin"
@@ -25,6 +26,12 @@
     "mixins": [
         "packmanager.mixins.json"
     ],
+    "accessWidener": "packmanager.accesswidener",
+    "custom": {
+        "loom:injected_interfaces": {
+            "net/minecraft/server/world/ServerWorld": [ "net/mcbrawls/packmanager/ResourcePackEnvironment" ]
+        }
+    },
     "depends": {
         "fabricloader": ">=0.14.24",
         "minecraft": "~1.20.2",

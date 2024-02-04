@@ -1,7 +1,7 @@
 //file:noinspection All
 
 plugins {
-    id "fabric-loom" version "1.4-SNAPSHOT"
+    id "fabric-loom" version "1.5-SNAPSHOT"
     id "org.jetbrains.kotlin.jvm"
     id "maven-publish"
 }
@@ -55,19 +55,15 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:$fabric_version"
     modImplementation "net.fabricmc:fabric-language-kotlin:$fabric_kotlin_version"
 
-    modImplementation "com.ptsmods:devlogin:$devlogin_version"
-
     // test
     testImplementation sourceSets.main.output
     testImplementation "org.apache.logging.log4j:log4j-slf4j2-impl:2.21.1"
-
-    testClientImplementation sourceSets.main.output
-    testClientImplementation sourceSets.client.output
-    testClientImplementation sourceSets.test.output
 }
 
 loom {
     runtimeOnlyLog4j = true
+
+    accessWidenerPath = file("src/main/resources/${mod_id}.accesswidener")
 
     mods {
         mod_id {
@@ -77,24 +73,8 @@ loom {
     }
 
     runs {
-        authenticatedClient {
-            client()
-            name("Minecraft Client (Authenticated)")
-            programArg("--msa")
-        }
-
-        testClient {
-            client()
-            name("Minecraft Client (Test)")
-            source(sourceSets.testClient)
-            runDir("runtest")
-        }
-
-        testClientAuthenticated {
-            inherit(testClient)
-            name("Minecraft Client (Test Authenticated)")
-            programArg("--msa")
-            runDir("runtest")
+        client {
+            ideConfigGenerated(false)
         }
 
         testServer {

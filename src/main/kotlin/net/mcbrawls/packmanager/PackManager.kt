@@ -1,15 +1,15 @@
 package net.mcbrawls.packmanager
 
-import net.fabricmc.api.ModInitializer
+import net.fabricmc.api.DedicatedServerModInitializer
 import org.slf4j.LoggerFactory
 
-object PackManager : ModInitializer {
-    private val logger = LoggerFactory.getLogger("packmanager")
+object PackManager : DedicatedServerModInitializer {
+    const val MOD_ID = "packmanager"
+    const val MOD_NAME = "Pack Manager"
 
-    override fun onInitialize() {
-        // This code runs as soon as Minecraft is in a mod-load-ready state.
-        // However, some things (like resources) may still be uninitialized.
-        // Proceed with mild caution.
-        logger.info("Hello Fabric world!")
+    private val logger = LoggerFactory.getLogger(MOD_NAME)
+
+    override fun onInitializeServer() {
+        logger.info("Initializing $MOD_NAME")
     }
 }
