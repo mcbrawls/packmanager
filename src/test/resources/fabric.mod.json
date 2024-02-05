@@ -1,0 +1,15 @@
+{
+    "schemaVersion": 1,
+    "id": "packmanager-test",
+    "version": "0.0.0",
+    "name": "Pack Manager (TEST)",
+    "environment": "server",
+    "entrypoints": {
+        "server": [
+            {
+                "value": "net.mcbrawls.packmanager.test.PackManagerTest",
+                "adapter": "kotlin"
+            }
+        ]
+    }
+}

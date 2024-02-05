@@ -27,23 +27,10 @@ repositories {
     }
 }
 
-loom.splitEnvironmentSourceSets()
-
 sourceSets {
     test {
         compileClasspath += main.compileClasspath
         runtimeClasspath += main.runtimeClasspath
-    }
-
-    testClient {
-        compileClasspath += main.compileClasspath
-        runtimeClasspath += main.runtimeClasspath
-
-        compileClasspath += client.compileClasspath
-        runtimeClasspath += client.runtimeClasspath
-
-        compileClasspath += test.compileClasspath
-        runtimeClasspath += test.runtimeClasspath
     }
 }
 
@@ -64,13 +51,6 @@ loom {
     runtimeOnlyLog4j = true
 
     accessWidenerPath = file("src/main/resources/${mod_id}.accesswidener")
-
-    mods {
-        mod_id {
-            sourceSet sourceSets.main
-            sourceSet sourceSets.client
-        }
-    }
 
     runs {
         client {

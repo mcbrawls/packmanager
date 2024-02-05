@@ -3,6 +3,7 @@
     "package": "net.mcbrawls.packmanager.mixin",
     "compatibilityLevel": "JAVA_17",
     "mixins": [
+        "MinecraftServerMixin",
         "ServerWorldMixin"
     ],
     "injectors": {

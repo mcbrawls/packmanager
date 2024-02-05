@@ -14,7 +14,7 @@
     },
     "license": "MIT",
     "icon": "assets/packmanager/icon.png",
-    "environment": "*",
+    "environment": "server",
     "entrypoints": {
         "server": [
             {
@@ -29,7 +29,8 @@
     "accessWidener": "packmanager.accesswidener",
     "custom": {
         "loom:injected_interfaces": {
-            "net/minecraft/server/world/ServerWorld": [ "net/mcbrawls/packmanager/ResourcePackEnvironment" ]
+            "net/minecraft/server/world/ServerWorld": [ "net/mcbrawls/packmanager/ResourcePackEnvironment" ],
+            "net/minecraft/server/MinecraftServer": [ "net/mcbrawls/packmanager/ResourcePackEnvironment" ]
         }
     },
     "depends": {
