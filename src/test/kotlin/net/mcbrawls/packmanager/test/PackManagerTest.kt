@@ -3,6 +3,7 @@ package net.mcbrawls.packmanager.test
 import net.fabricmc.api.DedicatedServerModInitializer
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.mcbrawls.packmanager.ResourcePackEnvironment
+import net.mcbrawls.packmanager.ResourcePackStatusEvent
 import net.minecraft.server.MinecraftServer.ServerResourcePackProperties
 import net.minecraft.world.World
 import java.util.UUID
@@ -58,6 +59,10 @@ object PackManagerTest : DedicatedServerModInitializer {
                     )
                 )
             }
+        }
+
+        ResourcePackStatusEvent.EVENT.register { player, id, status ->
+            println("${player.gameProfile.name}: $id, $status")
         }
     }
 }
