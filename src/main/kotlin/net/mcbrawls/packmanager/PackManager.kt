@@ -48,7 +48,7 @@ object PackManager : DedicatedServerModInitializer {
 
                 // server resource packs applied at configuration phase
                 if (server is ResourcePackEnvironment) {
-                    subtract(server.resourcePacks)
+                    removeAll(server.resourcePacks)
                 }
             }
 
@@ -87,11 +87,11 @@ object PackManager : DedicatedServerModInitializer {
             // remove old packs
             val packsToRemove = buildSet {
                 addAll(originPacks)
-                subtract(destinationPacks)
+                removeAll(destinationPacks)
 
                 // server resource packs do not need to be modified here
                 if (server is ResourcePackEnvironment) {
-                    subtract(server.resourcePacks)
+                    removeAll(server.resourcePacks)
                 }
             }
 
@@ -103,11 +103,11 @@ object PackManager : DedicatedServerModInitializer {
             // add new packs
             val packsToAdd = buildSet {
                 addAll(destinationPacks)
-                subtract(originPacks)
+                removeAll(originPacks)
 
                 // server resource packs do not need to be modified here
                 if (server is ResourcePackEnvironment) {
-                    subtract(server.resourcePacks)
+                    removeAll(server.resourcePacks)
                 }
             }
 
