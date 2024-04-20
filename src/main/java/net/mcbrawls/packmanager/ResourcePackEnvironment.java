@@ -46,7 +46,7 @@ public interface ResourcePackEnvironment {
                 properties.url(),
                 properties.hash(),
                 properties.isRequired(),
-                properties.prompt()
+                Optional.ofNullable(properties.prompt())
         );
     }
 

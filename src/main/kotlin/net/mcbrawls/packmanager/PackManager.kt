@@ -36,7 +36,7 @@ object PackManager : DedicatedServerModInitializer {
         }
 
         // register join event
-        ServerPlayConnectionEvents.JOIN.register { handler, sender, server ->
+        ServerPlayConnectionEvents.JOIN.register { handler, _, server ->
             val player = handler.player
 
             // compile pack set
