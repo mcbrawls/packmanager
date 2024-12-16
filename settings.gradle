@@ -1,11 +1,14 @@
 pluginManagement {
+    mod_id
+
     repositories {
         maven {
             name = "Fabric"
-            url  = "https://maven.fabricmc.net/"
+            url = "https://maven.fabricmc.net/"
         }
-        mavenCentral()
+
         gradlePluginPortal()
+        mavenCentral()
     }
 
     plugins {
@@ -13,4 +16,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "packmanager"
+rootProject.name = mod_id

@@ -1,12 +1,10 @@
-//file:noinspection All
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id "fabric-loom" version "1.6-SNAPSHOT"
+    id "fabric-loom" version "1.9-SNAPSHOT"
     id "org.jetbrains.kotlin.jvm"
     id "maven-publish"
 }
-
-def ENV = System.getenv()
 
 version = mod_version
 group = maven_group
@@ -17,13 +15,8 @@ base {
 
 repositories {
     maven {
-        name = "Andante"
-        url  = "https://maven.andante.dev/releases/"
-    }
-
-    maven {
-        name = "Nucleoid"
-        url  = "https://maven.nucleoid.xyz/"
+        name = "MC Brawls Maven"
+        url  = "https://maven.mcbrawls.net/releases/"
     }
 }
 
@@ -34,35 +27,40 @@ sourceSets {
     }
 }
 
-dependencies {
-    minecraft "com.mojang:minecraft:$minecraft_version"
-    mappings "net.fabricmc:yarn:$minecraft_version+build.$yarn_build:v2"
-    modImplementation "net.fabricmc:fabric-loader:$loader_version"
-
-    modImplementation "net.fabricmc.fabric-api:fabric-api:$fabric_version"
-    modImplementation "net.fabricmc:fabric-language-kotlin:$fabric_kotlin_version"
-
-    // test
-    testImplementation sourceSets.main.output
-}
-
 loom {
-    runtimeOnlyLog4j = true
-
     accessWidenerPath = file("src/main/resources/${mod_id}.accesswidener")
+    splitEnvironmentSourceSets()
+
+    mods {
+        mod_id {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.client
+        }
+    }
 
     runs {
         client {
-            ideConfigGenerated(false)
+            ideConfigGenerated = false
         }
 
         testServer {
-            server()
+            inherit(server)
             name("Minecraft Server (Test)")
             source(sourceSets.test)
-            runDir("runtest")
         }
     }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:$minecraft_version"
+    mappings "net.fabricmc:yarn:$minecraft_version+build.$yarn_build:v2"
+
+    modImplementation "net.fabricmc:fabric-loader:$loader_version"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:$fabric_version"
+
+    modImplementation "net.fabricmc:fabric-language-kotlin:$fabric_kotlin_version+kotlin.$kotlin_version"
+
+    testImplementation sourceSets.main.output
 }
 
 processResources {
@@ -73,26 +71,21 @@ processResources {
     }
 }
 
-tasks.withType(AbstractArchiveTask).configureEach {
-    preserveFileTimestamps = false
-    reproducibleFileOrder = true
-}
-
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = 17
+    it.options.release = 21
 }
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+tasks.withType(KotlinCompile).configureEach {
     kotlinOptions {
-        jvmTarget = 17
+        jvmTarget = 21
     }
 }
 
 java {
     withSourcesJar()
 
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 jar {
@@ -104,14 +97,30 @@ jar {
 publishing {
     publications {
         mavenJava(MavenPublication) {
+            artifactId = mod_id
             from components.java
+
+            pom {
+                name = "Pack Manager"
+                description = "A library for managing resource packs within contexts."
+                url = "https://mcbrawls.net"
+
+                licenses {
+                    license {
+                        name = "MIT"
+                        url = "https://opensource.org/licenses/MIT"
+                        distribution = "repo"
+                    }
+                }
+            }
         }
     }
 
     repositories {
         // Andante's Maven
-        def mavenUsername = ENV["MAVEN_USERNAME_ANDANTE"]
-        def mavenPassword = ENV["MAVEN_PASSWORD_ANDANTE"]
+        def env = System.getenv()
+        def mavenUsername = env["MAVEN_USERNAME_ANDANTE"]
+        def mavenPassword = env["MAVEN_PASSWORD_ANDANTE"]
         if (mavenUsername && mavenPassword) {
             maven {
                 name = "Andante"
