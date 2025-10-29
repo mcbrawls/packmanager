@@ -41,7 +41,7 @@ object PackManager : DedicatedServerModInitializer {
 
             // compile pack set
             val packs = buildSet {
-                val world = player.world
+                val world = player.entityWorld
                 if (world is ResourcePackEnvironment) {
                     addAll(world.resourcePacks)
                 }
@@ -66,8 +66,8 @@ object PackManager : DedicatedServerModInitializer {
 
         // register respawn event
         ServerPlayerEvents.AFTER_RESPAWN.register { oldPlayer, newPlayer, _ ->
-            val origin = oldPlayer.world
-            val destination = newPlayer.world
+            val origin = oldPlayer.entityWorld
+            val destination = newPlayer.entityWorld
             if (origin != destination) {
                 onWorldChange(newPlayer, origin, destination)
             }
@@ -79,41 +79,35 @@ object PackManager : DedicatedServerModInitializer {
      */
     private fun onWorldChange(player: ServerPlayerEntity, origin: ServerWorld, destination: ServerWorld) {
         // always true, just check for compiler
-        if (origin is ResourcePackEnvironment && destination is ResourcePackEnvironment) {
-            val originPacks = origin.resourcePacks
-            val destinationPacks = destination.resourcePacks
-            player.server.also { server ->
-                // remove old packs
-                val packsToRemove = buildSet {
-                    addAll(originPacks)
-                    removeAll(destinationPacks)
+        val originPacks = origin.resourcePacks
+        val destinationPacks = destination.resourcePacks
+        player.entityWorld.server.also { server ->
+            // remove old packs
+            val packsToRemove = buildSet {
+                addAll(originPacks)
+                removeAll(destinationPacks)
 
-                    // server resource packs do not need to be modified here
-                    if (server is ResourcePackEnvironment) {
-                        removeAll(server.resourcePacks)
-                    }
-                }
+                // server resource packs do not need to be modified here
+                removeAll(server.resourcePacks)
+            }
 
-                packsToRemove.forEach { properties ->
-                    val packet = ResourcePackEnvironment.createRemovePacket(properties.id)
-                    player.networkHandler.sendPacket(packet)
-                }
+            packsToRemove.forEach { properties ->
+                val packet = ResourcePackEnvironment.createRemovePacket(properties.id)
+                player.networkHandler.sendPacket(packet)
+            }
 
-                // add new packs
-                val packsToAdd = buildSet {
-                    addAll(destinationPacks)
-                    removeAll(originPacks)
+            // add new packs
+            val packsToAdd = buildSet {
+                addAll(destinationPacks)
+                removeAll(originPacks)
 
-                    // server resource packs do not need to be modified here
-                    if (server is ResourcePackEnvironment) {
-                        removeAll(server.resourcePacks)
-                    }
-                }
+                // server resource packs do not need to be modified here
+                removeAll(server.resourcePacks)
+            }
 
-                packsToAdd.forEach { properties ->
-                    val packet = ResourcePackEnvironment.createSendPacket(properties)
-                    player.networkHandler.sendPacket(packet)
-                }
+            packsToAdd.forEach { properties ->
+                val packet = ResourcePackEnvironment.createSendPacket(properties)
+                player.networkHandler.sendPacket(packet)
             }
         }
     }
